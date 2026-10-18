@@ -50,17 +50,29 @@ pnpm check      # astro check (needs TypeScript 6, pinned)
 
 ## Hero video
 
-The transition was generated with Higgsfield (FLUX 3 Video, start/end keyframes) from two generated stills.
-It is encoded with a short GOP (`-g 8`, no B-frames) so seeking on scroll is smooth, fetched as a blob after
-`window.load`, and skipped with `prefers-reduced-motion` or Save-Data (the poster frame stays).
+A 16 s journey generated with Higgsfield in two legs that share a keyframe, so they join without a cut:
 
-Re-encode from a new source:
+1. Platform → supply vessel heading to Ciudad del Carmen (Kling 3.0, 4K, start/end frames).
+2. Supply vessel → coastal facility (MiniMax H3, 2K, start/end frames).
 
-```sh
-ffmpeg -i source.mp4 -an -vf "crop=1920:1080:0:4,scale=1440:810:flags=lanczos,hqdn3d=1.5:1.5:3:3" \
-  -c:v libx264 -preset slower -crf 28 -g 8 -keyint_min 8 -sc_threshold 0 -bf 0 -pix_fmt yuv420p \
-  -movflags +faststart public/media/transicion.mp4
-```
+The legs are joined with a 0.25 s crossfade and upscaled to a 3840×2160 master (Topaz). Web tiers live in
+`public/media/` and the hero picks one at runtime (`pickSource` in `Hero.astro`): the smallest tier that covers
+the device pixels the cover-fitted video needs, best codec first (AV1 10-bit → HEVC 10-bit → H.264), skipping
+codecs `mediaCapabilities` reports as not smooth. Portrait screens get a 9:16 crop (1080×1920).
+
+| File | Codec | Size |
+| --- | --- | --- |
+| `hero-2560-{av1,hevc}.mp4` | AV1 / HEVC 10-bit | 2560×1440 |
+| `hero-1920-{av1,hevc}.mp4`, `hero-1920.mp4` | AV1 / HEVC 10-bit / H.264 | 1920×1080 |
+| `hero-movil-{av1,hevc}.mp4`, `hero-movil.mp4` | AV1 / HEVC 10-bit / H.264 | 1080×1920 |
+
+All tiers use a 12-frame GOP without scene-cut keyframes so seeking on scroll stays smooth. The file is fetched
+as a blob after `window.load`; with `prefers-reduced-motion` or Save-Data only the poster frame is shown.
+
+Encoding settings (from the 4K master): AV1 `libsvtav1 -preset 5 -crf 38 -g 12 -pix_fmt yuv420p10le`,
+HEVC `libx265 -preset slow -crf 28 -pix_fmt yuv420p10le -tag:v hvc1 -x265-params keyint=12:min-keyint=12:scenecut=0:bframes=0`,
+H.264 `libx264 -preset slower -tune film -crf 23 -g 12 -bf 0`. Mobile crop:
+`crop=ih*9/16:ih:min(iw-ih*9/16\,max(0\,iw*0.70-ih*9/32)):0,scale=1080:1920`.
 
 ## Brand assets
 

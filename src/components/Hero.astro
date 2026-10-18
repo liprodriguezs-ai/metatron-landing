@@ -4,28 +4,51 @@ import frameDesktop from '../assets/img/frame-inicio.jpg';
 import frameMobile from '../assets/img/frame-inicio-movil.jpg';
 import { services, site, whatsappUrl } from '../data/site';
 
-const [d1, d2, d3, m1] = await Promise.all([
-  getImage({ src: frameDesktop, width: 1920, format: 'avif', quality: 62 }),
-  getImage({ src: frameDesktop, width: 1280, format: 'avif', quality: 60 }),
-  getImage({ src: frameDesktop, width: 1600, format: 'avif', quality: 60 }),
-  getImage({ src: frameMobile, width: 608, format: 'avif', quality: 62 }),
-]);
-const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg', quality: 72 });
+const wide = await Promise.all(
+  [1280, 1920, 2560, 3840].map((width) => getImage({ src: frameDesktop, width, format: 'avif', quality: 62 })),
+);
+const tall = await Promise.all(
+  [720, 1080].map((width) => getImage({ src: frameMobile, width, format: 'avif', quality: 56 })),
+);
+const fallback = await getImage({ src: frameDesktop, width: 1920, format: 'jpg', quality: 80 });
+const srcset = (imgs: { src: string; options: { width?: number } }[]) =>
+  imgs.map((i) => `${i.src} ${i.options.width}w`).join(', ');
+
+// Scroll-scrubbed hero video, best codec first. Tiers are picked by the device pixels the
+// cover-fitted video needs; the 9:16 cut serves portrait screens.
+const videoSources = {
+  wide: [
+    { w: 2560, src: '/media/hero-2560-av1.mp4', type: 'video/mp4; codecs="av01.0.12M.10"' },
+    { w: 2560, src: '/media/hero-2560-hevc.mp4', type: 'video/mp4; codecs="hvc1.2.4.L150.B0"' },
+    { w: 1920, src: '/media/hero-1920-av1.mp4', type: 'video/mp4; codecs="av01.0.08M.10"' },
+    { w: 1920, src: '/media/hero-1920-hevc.mp4', type: 'video/mp4; codecs="hvc1.2.4.L123.B0"' },
+    { w: 1920, src: '/media/hero-1920.mp4', type: 'video/mp4; codecs="avc1.640028"' },
+  ],
+  tall: [
+    { w: 1080, src: '/media/hero-movil-av1.mp4', type: 'video/mp4; codecs="av01.0.08M.10"' },
+    { w: 1080, src: '/media/hero-movil-hevc.mp4', type: 'video/mp4; codecs="hvc1.2.4.L123.B0"' },
+    { w: 1080, src: '/media/hero-movil.mp4', type: 'video/mp4; codecs="avc1.640028"' },
+  ],
+};
 ---
 
 <section class="hero" id="inicio" data-hero aria-labelledby="hero-title">
   <div class="hero__sticky">
     <div class="hero__media" aria-hidden="true">
       <picture>
-        <source media="(max-aspect-ratio: 4/5)" srcset={m1.src} type="image/avif" />
-        <source srcset={`${d2.src} 1280w, ${d3.src} 1600w, ${d1.src} 1920w`} sizes="100vw" type="image/avif" />
+        <source
+          media="(max-aspect-ratio: 4/5)"
+          srcset={srcset(tall)}
+          sizes="max(100vw, 56.25vh)"
+          type="image/avif"
+        />
+        <source srcset={srcset(wide)} sizes="max(100vw, 177.78vh)" type="image/avif" />
         <img
           class="hero__poster"
           src={fallback.src}
-          width="1600"
-          height="900"
+          width="1920"
+          height="1080"
           alt=""
-          fetchpriority="high"
           decoding="async"
         />
       </picture>
@@ -36,15 +59,14 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
         preload="none"
         disablepictureinpicture
         tabindex="-1"
-        data-desktop="/media/transicion.mp4"
-        data-mobile="/media/transicion-movil.mp4"
+        data-sources={JSON.stringify(videoSources)}
       ></video>
       <div class="hero__shade"></div>
     </div>
 
     <div class="hero__stages wrap">
-      <div class="stage stage--1" data-stage data-in="-1" data-out="0.3">
-        <p class="eyebrow">Ciudad del Carmen · Campeche</p>
+      <div class="stage stage--1" data-stage data-in="-1" data-out="0.335">
+        <p class="eyebrow">Offshore · Terrestre · México</p>
         <h1 id="hero-title" class="hero__title">
           <span class="ln">Mantenimiento</span>
           <span class="ln">y obras <span class="accent">offshore</span></span>
@@ -52,7 +74,7 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
         </h1>
         <p class="hero__lead" id="resumen">
           Obra eléctrica, sistemas fotovoltaicos, aire acondicionado, aislamiento térmico, obra civil y
-          estructural para la industria, desde la Sonda de Campeche hasta tierra firme.
+          estructural para la industria en México, en plataformas costa afuera y en tierra firme.
         </p>
         <div class="hero__actions">
           <a class="btn" href="#contacto">
@@ -65,14 +87,14 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
         </div>
       </div>
 
-      <div class="stage stage--2" data-stage data-in="0.34" data-out="0.64">
+      <div class="stage stage--2" data-stage data-in="0.347" data-out="0.653">
         <p class="eyebrow">Costa afuera</p>
         <p class="hero__claim">
           Fuerza, compromiso <br />y <span class="accent">experiencia</span> que <br />construye confianza.
         </p>
       </div>
 
-      <div class="stage stage--3" data-stage data-in="0.7" data-out="2">
+      <div class="stage stage--3" data-stage data-in="0.665" data-out="2">
         <p class="eyebrow">Tierra firme</p>
         <p class="hero__claim">
           Del mar a tierra, <br /><span class="accent">un mismo estándar.</span>
@@ -105,6 +127,12 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
       </div>
       <div class="hud__load mono" data-load><span data-load-pct>0</span>% secuencia</div>
     </div>
+
+    <p class="chapter mono" aria-hidden="true" data-chapter>
+      <span class="chapter__n" data-ch-n>01</span>
+      <span class="chapter__sep"></span>
+      <span data-ch-t>Plataforma offshore</span>
+    </p>
 
     <div class="hero__cue mono" data-cue aria-hidden="true">
       <span>Desplázate</span>
@@ -286,6 +314,44 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
     opacity: 0;
   }
 
+  .chapter {
+    position: absolute;
+    left: 50%;
+    bottom: 2.15rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    color: var(--paper);
+    opacity: 0;
+    transition: opacity 0.6s var(--ease-out);
+    pointer-events: none;
+  }
+  .chapter.is-on {
+    opacity: 1;
+  }
+  .chapter__n {
+    color: var(--gold-400);
+  }
+  .chapter__sep {
+    width: 1.5rem;
+    height: 1px;
+    background: var(--line-strong);
+  }
+  .chapter.is-swap [data-ch-t],
+  .chapter.is-swap [data-ch-n] {
+    display: inline-block;
+    animation: chIn 0.7s var(--ease-out);
+  }
+  @keyframes chIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+  }
+
   .hero__cue {
     position: absolute;
     left: 50%;
@@ -331,6 +397,9 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
     .hud__load {
       display: none;
     }
+    .chapter {
+      bottom: 3.6rem;
+    }
   }
   @media (max-aspect-ratio: 4/5) {
     .hero__shade {
@@ -365,6 +434,7 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
     .stage--2,
     .stage--3,
     .hud,
+    .chapter,
     .hero__cue {
       display: none;
     }
@@ -389,6 +459,16 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
   const lngEl = hero.querySelector<HTMLElement>('[data-lng]')!;
   const cue = hero.querySelector<HTMLElement>('[data-cue]')!;
   const pctEl = hero.querySelector<HTMLElement>('[data-load-pct]')!;
+  const chapter = hero.querySelector<HTMLElement>('[data-chapter]')!;
+  const chNum = hero.querySelector<HTMLElement>('[data-ch-n]')!;
+  const chText = hero.querySelector<HTMLElement>('[data-ch-t]')!;
+  // Chapter boundaries match the stage hand-offs, so the HUD always names what is on screen.
+  const CHAPTERS = [
+    { until: 0.341, title: 'Plataforma offshore' },
+    { until: 0.659, title: 'Golfo de México' },
+    { until: Infinity, title: 'Tierra firme' },
+  ];
+  let chapterIdx = 0;
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
@@ -416,7 +496,7 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
 
   const render = () => {
     const p = progress();
-    const F = 0.07;
+    const F = 0.035;
     for (const s of stages) {
       const fadeIn = s.a < 0 ? 1 : smooth((p - s.a) / F);
       const fadeOut = s.b > 1 ? 1 : smooth((s.b - p) / F);
@@ -431,6 +511,16 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
     latEl.textContent = `${(FROM.lat + (TO.lat - FROM.lat) * p).toFixed(4)}° N`;
     lngEl.textContent = `${(FROM.lng + (TO.lng - FROM.lng) * p).toFixed(4)}° W`;
     cue.style.opacity = p > 0.03 ? '0' : '1';
+    chapter.classList.toggle('is-on', p > 0.03);
+    const ci = CHAPTERS.findIndex((c) => p < c.until);
+    if (ci !== chapterIdx) {
+      chapterIdx = ci;
+      chNum.textContent = `0${ci + 1}`;
+      chText.textContent = CHAPTERS[ci].title;
+      chapter.classList.remove('is-swap');
+      void chapter.offsetWidth;
+      chapter.classList.add('is-swap');
+    }
 
     if (duration > 0) {
       const target = p * (duration - 0.05);
@@ -446,11 +536,55 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
     requestAnimationFrame(loop);
   };
 
+  type Source = { w: number; src: string; type: string };
+
+  // Best playable source: smallest tier that covers the needed device pixels, best codec first,
+  // and only codecs the device decodes smoothly (seeking every frame needs hardware decode).
+  const pickSource = async (): Promise<string> => {
+    const sets = JSON.parse(video.dataset.sources!) as { wide: Source[]; tall: Source[] };
+    const portrait = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
+    const list = portrait ? sets.tall : sets.wide;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const vw = window.innerWidth * dpr;
+    const vh = window.innerHeight * dpr;
+    const need = portrait ? Math.max(vw, (vh * 9) / 16) : Math.max(vw, (vh * 16) / 9);
+    const tiers = [...new Set(list.map((s) => s.w))].sort((a, b) => a - b);
+    const tier = tiers.find((t) => t >= need * 0.85) ?? tiers[tiers.length - 1];
+    const ordered = [...list.filter((s) => s.w === tier), ...list.filter((s) => s.w !== tier)];
+    for (const s of ordered) {
+      if (!video.canPlayType(s.type)) continue;
+      try {
+        const info = await navigator.mediaCapabilities?.decodingInfo({
+          type: 'file',
+          video: {
+            contentType: s.type,
+            width: s.w,
+            height: portrait ? Math.round((s.w * 16) / 9) : Math.round((s.w * 9) / 16),
+            bitrate: 8_000_000,
+            framerate: 24,
+          },
+        });
+        if (info && !info.smooth) continue;
+      } catch {
+        /* mediaCapabilities unavailable: trust canPlayType */
+      }
+      return s.src;
+    }
+    return list[list.length - 1].src;
+  };
+
   const loadVideo = async () => {
-    const mobile = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
-    const src = mobile ? video.dataset.mobile! : video.dataset.desktop!;
+    const src = await pickSource();
+    video.dataset.picked = src;
+    let res: Response;
     try {
-      const res = await fetch(src);
+      res = await fetch(src);
+    } catch {
+      video.src = src; // Network hiccup: let the element stream it.
+      res = new Response(null, { status: 204 });
+    }
+    if (!res.ok) return; // Missing file: keep the poster frame.
+    if (res.status !== 204) {
       const total = Number(res.headers.get('content-length')) || 0;
       let blob: Blob;
       if (res.body && total) {
@@ -469,8 +603,6 @@ const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg',
         blob = await res.blob();
       }
       video.src = URL.createObjectURL(blob);
-    } catch {
-      video.src = src; // Streaming fallback
     }
     video.addEventListener(
       'loadeddata',
