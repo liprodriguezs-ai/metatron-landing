@@ -6,6 +6,10 @@ import { SITE_URL } from './src/data/site-url.mjs';
 export default defineConfig({
   site: SITE_URL,
   trailingSlash: 'ignore',
+  // Dev/preview only: allow Cloudflare quick tunnels (random *.trycloudflare.com names) for remote review.
+  server: {
+    allowedHosts: ['.trycloudflare.com'],
+  },
   integrations: [
     sitemap({
       i18n: { defaultLocale: 'es', locales: { es: 'es-MX' } },
