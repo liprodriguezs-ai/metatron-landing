@@ -72,7 +72,7 @@ W, H = 1200, 630
 b = [f'<rect width="{W}" height="{H}" fill="url(#fadeL)"/>']
 b.append(lockup(72, 64, 54, 26))
 b.append(f'<rect x="72" y="176" width="44" height="3" fill="{GOLD}"/>')
-b.append(txt(MONO, 'CIUDAD DEL CARMEN · CAMPECHE · MX', 15, 132, 183, GOLD, tracking=2.2)[0])
+b.append(txt(MONO, 'OFFSHORE · TERRESTRE · MÉXICO', 15, 132, 183, GOLD, tracking=2.2)[0])
 b.append(txt(light, 'Mantenimiento y obras', 64, 70, 280, WHITE, tracking=-1.2)[0])
 t, w1 = txt(semi, 'offshore', 64, 70, 358, GOLD, tracking=-1.2)
 b.append(t)
@@ -99,7 +99,7 @@ t, w1 = txt(light, 'Tu proyecto,', 84, 0, 0, WHITE, tracking=-2)
 b.append(t.replace('translate(0.0 0.0)', f'translate({(W - w1) / 2:.1f} 935)'))
 t, w2 = txt(semi, 'nuestra misión.', 84, 0, 0, GOLD, tracking=-2)
 b.append(t.replace('translate(0.0 0.0)', f'translate({(W - w2) / 2:.1f} 1030)'))
-t, w3 = txt(MONO, 'CIUDAD DEL CARMEN, CAMPECHE  ·  938 183 8455', 20, 0, 0, WHITE, tracking=2, opacity=.75)
+t, w3 = txt(MONO, 'MÉXICO  ·  938 183 8455', 20, 0, 0, WHITE, tracking=2, opacity=.75)
 b.append(t.replace('translate(0.0 0.0)', f'translate({(W - w3) / 2:.1f} 1110)'))
 render('og-square', W, H, f'{IMG}/frame-final.jpg', '\n'.join(b))
 
@@ -117,7 +117,7 @@ for i, (s, f, c) in enumerate([('Fuerza,', light, WHITE), ('compromiso y', light
                                 ('confianza.', semi, WHITE)]):
     t, lw = txt(f, s, 104, 0, 0, c, tracking=-2.5)
     b.append(t.replace('translate(0.0 0.0)', f'translate({(W - lw) / 2:.1f} {1240 + i * 112})'))
-t, w3 = txt(MONO, '938 183 8455  ·  CD. DEL CARMEN, CAMP.', 22, 0, 0, WHITE, tracking=2, opacity=.8)
+t, w3 = txt(MONO, '938 183 8455  ·  MÉXICO', 22, 0, 0, WHITE, tracking=2, opacity=.8)
 b.append(t.replace('translate(0.0 0.0)', f'translate({(W - w3) / 2:.1f} 1840)'))
 render('og-story', W, H, f'{IMG}/frame-inicio-movil.jpg', '\n'.join(b))
 print('ok')

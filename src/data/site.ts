@@ -8,9 +8,9 @@ export const site = {
   tagline: 'Mantenimiento y obras offshore / terrestres',
   slogan: 'Tu proyecto, nuestra misión.',
   claim: 'Fuerza, compromiso y experiencia que construye confianza.',
-  title: 'Metatron Service | Mantenimiento y obras offshore y terrestres en Ciudad del Carmen, Campeche',
+  title: 'Metatron Service | Mantenimiento industrial y obras offshore y terrestres en México',
   description:
-    'Mantenimiento industrial y obras offshore y terrestres en Ciudad del Carmen, Campeche: obra eléctrica, sistemas fotovoltaicos, aire acondicionado, aislamiento térmico, obra civil y estructural. Cotiza tu proyecto.',
+    'Mantenimiento industrial y obras offshore y terrestres en México: obra eléctrica, sistemas fotovoltaicos, aire acondicionado, aislamiento térmico, obra civil y estructural. Cotiza tu proyecto.',
   locale: 'es_MX',
   lang: 'es-MX',
   phone: '+529381838455',
@@ -32,7 +32,7 @@ export const site = {
     displayName: 'Ing. José Antonio Jiménez',
     role: 'Gerente de Proyectos',
   },
-  areaServed: ['Ciudad del Carmen', 'Campeche', 'Sonda de Campeche', 'Golfo de México', 'México'],
+  areaServed: ['México', 'Golfo de México'],
   pillars: ['Calidad', 'Seguridad', 'Compromiso'],
   mission:
     'Somos un equipo íntegro, orientado al servicio del Cliente, mejorando continuamente nuestros procesos, con el objetivo de consolidar nuestra empresa con un reconocido prestigio Nacional por su eficiencia, calidad y competitividad.',
@@ -97,9 +97,9 @@ export const services: Service[] = [
       'Mantenimiento preventivo y correctivo',
       'Reparación de inversores y cableado',
     ],
-    keywords: ['paneles solares', 'inversores', 'energía solar Campeche'],
+    keywords: ['paneles solares', 'inversores', 'energía solar industrial'],
     image: 'solar',
-    alt: 'Técnico caminando entre filas de paneles solares sobre la azotea de una nave industrial en Campeche',
+    alt: 'Técnico caminando entre filas de paneles solares sobre la azotea de una nave industrial',
   },
   {
     id: 'aire-acondicionado',
@@ -150,7 +150,7 @@ export const services: Service[] = [
       'Fabricación de locales de gobierno',
       'Plafón, tablaroca, aplanados y nivelación de juntas',
     ],
-    keywords: ['construcción Ciudad del Carmen', 'tablaroca', 'bardas perimetrales'],
+    keywords: ['obra civil comercial', 'tablaroca', 'bardas perimetrales'],
     image: 'civil',
     alt: 'Obra civil comercial al anochecer con barda de block, banquetas nuevas y local iluminado',
   },
@@ -242,7 +242,7 @@ export const faqs = [
   },
   {
     q: '¿Dónde opera Metatron Service?',
-    a: 'La empresa tiene base en Ciudad del Carmen, Campeche, México, y realiza mantenimiento y obras tanto terrestres como offshore (costa afuera) en la región del Golfo de México.',
+    a: 'Metatron Service atiende proyectos de mantenimiento y obra en México, tanto terrestres como offshore (costa afuera) en el Golfo de México. Su oficina base está en Ciudad del Carmen, Campeche.',
   },
   {
     q: '¿Realizan trabajos offshore o costa afuera?',
