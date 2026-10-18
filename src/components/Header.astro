@@ -1,0 +1,283 @@
+---
+import Logo from '../assets/brand/logo-horizontal-dark.svg';
+import { site, whatsappUrl } from '../data/site';
+
+const links = [
+  { href: '#servicios', label: 'Servicios' },
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#proceso', label: 'Proceso' },
+  { href: '#nosotros', label: 'Nosotros' },
+  { href: '#faq', label: 'Preguntas' },
+];
+---
+
+<header class="hdr" data-hdr>
+  <div class="hdr__in wrap">
+    <a href="/" class="hdr__logo" aria-label="Metatron Service, inicio">
+      <Logo aria-hidden="true" class="hdr__svg" />
+    </a>
+
+    <nav class="hdr__nav" aria-label="Principal">
+      <ul role="list">
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="hdr__cta">
+      <a class="hdr__tel mono" href={`tel:${site.phone}`}>{site.phoneDisplay}</a>
+      <a class="btn hdr__btn" href="#contacto">Cotizar proyecto</a>
+      <button class="hdr__menu" type="button" aria-expanded="false" aria-controls="menu" data-menu-btn>
+        <span class="sr-only">Abrir menú</span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" data-menu hidden>
+  <nav aria-label="Menú móvil" class="wrap">
+    <ol role="list">
+      {
+        links.map((l, i) => (
+          <li style={`--i:${i}`}>
+            <a href={l.href} data-menu-link>
+              <span class="mono">0{i + 1}</span>
+              {l.label}
+            </a>
+          </li>
+        ))
+      }
+      <li style={`--i:${links.length}`}>
+        <a href="#contacto" data-menu-link><span class="mono">0{links.length + 1}</span>Contacto</a>
+      </li>
+    </ol>
+    <div class="menu__foot">
+      <a class="btn" href={whatsappUrl()} target="_blank" rel="noopener">WhatsApp {site.phoneDisplay}</a>
+      <a class="mono" href={`mailto:${site.email}`}>{site.email}</a>
+    </div>
+  </nav>
+</div>
+
+<style>
+  .hdr {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    transition:
+      background-color 0.5s var(--ease-out),
+      border-color 0.5s var(--ease-out),
+      transform 0.6s var(--ease-out);
+    border-bottom: 1px solid transparent;
+  }
+  .hdr.is-solid {
+    background: rgb(6 14 32 / 0.72);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border-color: var(--line);
+  }
+  .hdr.is-hidden {
+    transform: translateY(-100%);
+  }
+  .hdr__in {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    height: 4.75rem;
+  }
+  .hdr__logo {
+    display: block;
+    flex-shrink: 0;
+  }
+  .hdr__svg {
+    height: 2.4rem;
+    width: auto;
+  }
+  .hdr__nav ul {
+    display: flex;
+    gap: clamp(1rem, 2.2vw, 2.25rem);
+  }
+  .hdr__nav a {
+    position: relative;
+    font-size: 0.9rem;
+    color: var(--fg-muted);
+    transition: color 0.3s;
+  }
+  .hdr__nav a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 1px;
+    background: var(--gold-400);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s var(--ease-out);
+  }
+  .hdr__nav a:hover {
+    color: var(--paper);
+  }
+  .hdr__nav a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  .hdr__cta {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .hdr__tel {
+    color: var(--fg-muted);
+    transition: color 0.3s;
+  }
+  .hdr__tel:hover {
+    color: var(--gold-400);
+  }
+  .hdr__btn {
+    min-height: 2.75rem;
+    padding-inline: 1.25rem;
+    font-size: 0.875rem;
+  }
+  .hdr__menu {
+    display: none;
+    position: relative;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+  }
+  .hdr__menu span[aria-hidden] {
+    position: absolute;
+    left: 50%;
+    width: 1.1rem;
+    height: 1.5px;
+    margin-left: -0.55rem;
+    background: var(--paper);
+    transition: transform 0.4s var(--ease-out);
+  }
+  .hdr__menu span[aria-hidden]:nth-of-type(2) {
+    top: calc(50% - 3px);
+  }
+  .hdr__menu span[aria-hidden]:nth-of-type(3) {
+    top: calc(50% + 3px);
+  }
+  .hdr__menu[aria-expanded='true'] span[aria-hidden]:nth-of-type(2) {
+    transform: translateY(3px) rotate(45deg);
+  }
+  .hdr__menu[aria-expanded='true'] span[aria-hidden]:nth-of-type(3) {
+    transform: translateY(-3px) rotate(-45deg);
+  }
+
+  .menu {
+    position: fixed;
+    inset: 4.75rem 0 0;
+    z-index: 49;
+    background: var(--navy-950);
+    padding-block: 2rem 3rem;
+    overflow-y: auto;
+  }
+  .menu nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+    gap: 3rem;
+  }
+  .menu ol a {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--line);
+    font-size: clamp(2rem, 9vw, 3rem);
+    font-weight: 300;
+    letter-spacing: -0.03em;
+  }
+  .menu ol .mono {
+    color: var(--gold-400);
+  }
+  .menu li {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity 0.6s var(--ease-out),
+      transform 0.6s var(--ease-out);
+    transition-delay: calc(var(--i) * 0.05s);
+  }
+  .menu.is-open li {
+    opacity: 1;
+    transform: none;
+  }
+  .menu__foot {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    color: var(--fg-muted);
+  }
+
+  @media (max-width: 1060px) {
+    .hdr__nav,
+    .hdr__tel {
+      display: none;
+    }
+  }
+  @media (max-width: 720px) {
+    .hdr__btn {
+      display: none;
+    }
+    .hdr__menu {
+      display: block;
+    }
+    .hdr__svg {
+      height: 2rem;
+    }
+  }
+</style>
+
+<script>
+  const hdr = document.querySelector<HTMLElement>('[data-hdr]')!;
+  const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]')!;
+  const menu = document.querySelector<HTMLElement>('[data-menu]')!;
+  let lastY = window.scrollY;
+  let open = false;
+
+  const onScroll = () => {
+    const y = window.scrollY;
+    hdr.classList.toggle('is-solid', y > 40 || open);
+    hdr.classList.toggle('is-hidden', !open && y > lastY && y > 600);
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const lenis = () => (window as unknown as { __lenis?: { stop(): void; start(): void } }).__lenis;
+  const setOpen = (v: boolean) => {
+    open = v;
+    btn.setAttribute('aria-expanded', String(v));
+    btn.querySelector('.sr-only')!.textContent = v ? 'Cerrar menú' : 'Abrir menú';
+    if (v) {
+      menu.hidden = false;
+      requestAnimationFrame(() => menu.classList.add('is-open'));
+      lenis()?.stop();
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      menu.classList.remove('is-open');
+      menu.hidden = true;
+      lenis()?.start();
+      document.documentElement.style.overflow = '';
+    }
+    onScroll();
+  };
+  btn.addEventListener('click', () => setOpen(!open));
+  menu.querySelectorAll('[data-menu-link]').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && open) {
+      setOpen(false);
+      btn.focus();
+    }
+  });
+</script>

@@ -1,0 +1,125 @@
+---
+import Logo from '../assets/brand/logo-stacked-dark.svg';
+import { mapsUrl, services, site, whatsappUrl } from '../data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="ftr">
+  <div class="wrap">
+    <div class="ftr__top">
+      <a href="/" class="ftr__logo" aria-label="Metatron Service, inicio">
+        <Logo aria-hidden="true" />
+      </a>
+      <p class="ftr__claim">{site.claim}</p>
+    </div>
+
+    <div class="ftr__cols">
+      <nav aria-label="Especialidades">
+        <h2 class="mono">Especialidades</h2>
+        <ul role="list">
+          {services.map((s) => <li><a href={`#${s.id}`}>{s.name}</a></li>)}
+        </ul>
+      </nav>
+
+      <div>
+        <h2 class="mono">Contacto</h2>
+        <address>
+          <p><strong>{site.name}</strong></p>
+          <p>
+            <a href={mapsUrl} target="_blank" rel="noopener">
+              {site.address.street}<br />C.P. {site.address.postalCode}, {site.address.locality}, {site.address.region}, México
+            </a>
+          </p>
+          <p><a href={`tel:${site.phone}`}>Tel. {site.phoneDisplay}</a></p>
+          <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+        </address>
+      </div>
+
+      <div>
+        <h2 class="mono">Cobertura</h2>
+        <ul role="list">
+          <li>Ciudad del Carmen, Campeche</li>
+          <li>Sonda de Campeche (offshore)</li>
+          <li>Golfo de México</li>
+        </ul>
+        <a class="btn ftr__btn" href={whatsappUrl()} target="_blank" rel="noopener">WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="ftr__bottom mono">
+      <span>© {year} {site.name}. Todos los derechos reservados.</span>
+      <span>Calidad · Seguridad · Compromiso</span>
+      <a href="#inicio">Volver arriba ↑</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr {
+    background: var(--navy-990);
+    border-top: 1px solid var(--line);
+    padding-block: clamp(4rem, 8vw, 7rem) 2rem;
+  }
+  .ftr__top {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--line);
+  }
+  .ftr__logo :global(svg) {
+    width: clamp(14rem, 30vw, 22rem);
+    height: auto;
+  }
+  .ftr__claim {
+    max-width: 22rem;
+    font-size: var(--step-2);
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .ftr__cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    padding-block: 3rem;
+  }
+  .ftr h2 {
+    color: var(--gold-400);
+    margin-bottom: 1.25rem;
+    font-weight: 500;
+  }
+  .ftr ul,
+  .ftr address {
+    display: grid;
+    gap: 0.6rem;
+    font-style: normal;
+    color: var(--fg-muted);
+  }
+  .ftr a:not(.btn) {
+    transition: color 0.3s;
+  }
+  .ftr a:not(.btn):hover {
+    color: var(--gold-200);
+  }
+  .ftr__btn {
+    margin-top: 1.5rem;
+  }
+  .ftr__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    color: var(--fg-dim);
+  }
+  @media (max-width: 760px) {
+    .ftr__cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

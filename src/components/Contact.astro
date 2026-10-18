@@ -1,0 +1,329 @@
+---
+import { Image } from 'astro:assets';
+import finalFrame from '../assets/img/frame-final.jpg';
+import { mapsUrl, services, site, whatsappUrl } from '../data/site';
+---
+
+<section class="cta" id="contacto" aria-labelledby="cta-title">
+  <Image
+    src={finalFrame}
+    alt=""
+    aria-hidden="true"
+    widths={[960, 1600, 2400]}
+    sizes="100vw"
+    class="cta__bg"
+    format="avif"
+    quality={58}
+  />
+  <div class="cta__veil" aria-hidden="true"></div>
+
+  <div class="wrap cta__grid section">
+    <div class="cta__copy">
+      <p class="eyebrow" data-reveal>Contacto</p>
+      <h2 id="cta-title" data-reveal style="--d:.08s">
+        Tu proyecto, <br /><span class="accent">nuestra misión.</span>
+      </h2>
+      <p class="cta__lead" data-reveal style="--d:.16s">
+        Cuéntanos qué necesitas mantener, reparar o construir. Te respondemos con una propuesta clara de
+        alcance, tiempo y costo.
+      </p>
+
+      <ul class="channels" role="list">
+        <li data-reveal>
+          <span class="mono">WhatsApp / Teléfono</span>
+          <a href={whatsappUrl()} target="_blank" rel="noopener">{site.phoneDisplay}</a>
+        </li>
+        <li data-reveal style="--d:.06s">
+          <span class="mono">Correo</span>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+        </li>
+        <li data-reveal style="--d:.12s">
+          <span class="mono">Oficina</span>
+          <a href={mapsUrl} target="_blank" rel="noopener">
+            {site.address.street}, C.P. {site.address.postalCode}, {site.address.locality}, {site.address.region}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <form class="quote" data-quote data-reveal style="--d:.1s" novalidate>
+      <h3 class="quote__title">Solicitud de cotización</h3>
+      <p class="quote__hint">Se envía directo por WhatsApp o correo. No guardamos tus datos.</p>
+
+      <div class="field">
+        <label for="q-name">Nombre</label>
+        <input id="q-name" name="nombre" autocomplete="name" required />
+      </div>
+      <div class="field">
+        <label for="q-company">Empresa <span>(opcional)</span></label>
+        <input id="q-company" name="empresa" autocomplete="organization" />
+      </div>
+
+      <fieldset class="field">
+        <legend>Tipo de instalación</legend>
+        <div class="seg">
+          <label><input type="radio" name="frente" value="Offshore" /><span>Offshore</span></label>
+          <label><input type="radio" name="frente" value="Terrestre" checked /><span>Terrestre</span></label>
+        </div>
+      </fieldset>
+
+      <div class="field">
+        <label for="q-service">Especialidad</label>
+        <select id="q-service" name="servicio">
+          {services.map((s) => <option>{s.name}</option>)}
+          <option>Otra / varias</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="q-msg">Alcance del trabajo</label>
+        <textarea id="q-msg" name="mensaje" rows="4" required placeholder="Ubicación, equipos, tiempos, etc."></textarea>
+      </div>
+
+      <p class="quote__err" role="alert" data-err hidden>Completa tu nombre y el alcance del trabajo.</p>
+
+      <div class="quote__actions">
+        <button class="btn" type="submit" value="wa">
+          Enviar por WhatsApp
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"
+            ><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+          >
+        </button>
+        <button class="btn btn--ghost" type="submit" value="mail">Enviar por correo</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<style>
+  .cta {
+    position: relative;
+    overflow: hidden;
+  }
+  .cta__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+  }
+  .cta__veil {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, var(--navy-950) 0%, rgb(6 14 32 / 0.55) 30%, rgb(6 14 32 / 0.75) 70%, var(--navy-950) 100%),
+      linear-gradient(90deg, rgb(6 14 32 / 0.85), rgb(6 14 32 / 0.2));
+  }
+  .cta__grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: clamp(2.5rem, 6vw, 7rem);
+    align-items: center;
+  }
+  .cta__copy {
+    display: grid;
+    gap: 1.75rem;
+  }
+  .cta h2 {
+    font-size: min(var(--step-5), 6.5rem);
+    line-height: 0.94;
+  }
+  .cta__lead {
+    max-width: 32rem;
+    color: var(--fg-muted);
+    font-size: var(--step-1);
+    line-height: 1.45;
+  }
+  .channels {
+    display: grid;
+    margin-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .channels li {
+    display: grid;
+    grid-template-columns: 12rem 1fr;
+    gap: 1rem;
+    padding-block: 1.1rem;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .channels .mono {
+    color: var(--gold-400);
+  }
+  .channels a {
+    font-size: var(--step-1);
+    letter-spacing: -0.01em;
+    transition: color 0.3s;
+  }
+  .channels a:hover {
+    color: var(--gold-200);
+  }
+
+  .quote {
+    display: grid;
+    gap: 1.1rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: rgb(6 14 32 / 0.62);
+    backdrop-filter: blur(22px) saturate(140%);
+    -webkit-backdrop-filter: blur(22px) saturate(140%);
+  }
+  .quote__title {
+    font-size: var(--step-2);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+  }
+  .quote__hint {
+    margin-top: -0.6rem;
+    color: var(--fg-dim);
+    font-size: 0.875rem;
+  }
+  .field {
+    display: grid;
+    gap: 0.45rem;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .field label,
+  .field legend {
+    padding: 0;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+  }
+  .field label span {
+    color: var(--fg-dim);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    background: rgb(247 243 234 / 0.04);
+    color: var(--paper);
+    font: inherit;
+    font-size: 1rem;
+    transition:
+      border-color 0.3s,
+      background 0.3s;
+  }
+  .field select {
+    appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--gold-400) 50%),
+      linear-gradient(135deg, var(--gold-400) 50%, transparent 50%);
+    background-position:
+      calc(100% - 20px) 55%,
+      calc(100% - 15px) 55%;
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+  }
+  .field select option {
+    background: var(--navy-900);
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    outline: none;
+    border-color: var(--gold-400);
+    background: rgb(247 243 234 / 0.07);
+  }
+  .field textarea {
+    resize: vertical;
+    min-height: 7rem;
+  }
+  .seg {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+  .seg label {
+    position: relative;
+    font-family: var(--sans);
+    font-size: 0.95rem;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+  .seg input {
+    position: absolute;
+    opacity: 0;
+  }
+  .seg span {
+    display: block;
+    padding: 0.8rem 1rem;
+    text-align: center;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    color: var(--fg-muted);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .seg input:checked + span {
+    border-color: var(--gold-500);
+    background: rgb(227 162 26 / 0.12);
+    color: var(--gold-200);
+  }
+  .seg input:focus-visible + span {
+    outline: 2px solid var(--gold-400);
+    outline-offset: 2px;
+  }
+  .quote__err {
+    color: #ffb4a8;
+    font-size: 0.9rem;
+  }
+  .quote__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+  @media (max-width: 960px) {
+    .cta__grid {
+      grid-template-columns: 1fr;
+    }
+    .channels li {
+      grid-template-columns: 1fr;
+      gap: 0.25rem;
+    }
+  }
+</style>
+
+<script>
+  import { site } from '../data/site';
+
+  const form = document.querySelector<HTMLFormElement>('[data-quote]')!;
+  const err = form.querySelector<HTMLElement>('[data-err]')!;
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const via = ((e as SubmitEvent).submitter as HTMLButtonElement | null)?.value ?? 'wa';
+    const d = new FormData(form);
+    const nombre = String(d.get('nombre') ?? '').trim();
+    const mensaje = String(d.get('mensaje') ?? '').trim();
+    if (!nombre || !mensaje) {
+      err.hidden = false;
+      (form.querySelector(nombre ? '#q-msg' : '#q-name') as HTMLElement).focus();
+      return;
+    }
+    err.hidden = true;
+    const empresa = String(d.get('empresa') ?? '').trim();
+    const lines = ['Hola Metatron Service, quiero solicitar una cotización.', '', `Nombre: ${nombre}`];
+    if (empresa) lines.push(`Empresa: ${empresa}`);
+    lines.push(`Instalación: ${d.get('frente')}`, `Especialidad: ${d.get('servicio')}`, `Alcance: ${mensaje}`);
+    const text = lines.join('\n');
+    const url =
+      via === 'mail'
+        ? `mailto:${site.email}?subject=${encodeURIComponent(`Cotización — ${d.get('servicio')}`)}&body=${encodeURIComponent(text)}`
+        : `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
+    window.open(url, via === 'mail' ? '_self' : '_blank', 'noopener');
+  });
+</script>

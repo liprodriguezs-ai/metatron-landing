@@ -1,0 +1,247 @@
+---
+import { Image } from 'astro:assets';
+import equipo from '../assets/img/equipo.jpg';
+import Icon from '../assets/brand/logo-icon-currentcolor.svg';
+import { site } from '../data/site';
+
+const ring = 'CALIDAD · SEGURIDAD · COMPROMISO · ';
+---
+
+<section class="about section" id="nosotros" aria-labelledby="about-title">
+  <div class="wrap about__grid">
+    <div class="about__media" data-reveal>
+      <Image
+        src={equipo}
+        alt="Equipo de técnicos de Metatron Service con casco observando plataformas costa afuera al anochecer"
+        widths={[560, 900, 1200]}
+        sizes="(max-width: 900px) 100vw, 42vw"
+        class="about__img"
+        format="avif"
+        quality={62}
+      />
+      <div class="seal" aria-hidden="true">
+        <svg viewBox="0 0 200 200" class="seal__ring">
+          <defs>
+            <path id="seal-path" d="M100 100 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0"></path>
+          </defs>
+          <text><textPath href="#seal-path" textLength="486" lengthAdjust="spacing">{ring}</textPath></text>
+        </svg>
+        <Icon class="seal__icon" />
+      </div>
+    </div>
+
+    <div class="about__copy">
+      <p class="eyebrow eyebrow--ink" data-reveal>Nosotros</p>
+      <h2 id="about-title" data-reveal style="--d:.08s">
+        Un equipo íntegro, <br /><em>orientado al cliente.</em>
+      </h2>
+
+      <div class="mv">
+        <div data-reveal>
+          <h3 class="mono">Misión</h3>
+          <p>{site.mission}</p>
+        </div>
+        <div data-reveal style="--d:.1s">
+          <h3 class="mono">Visión</h3>
+          <p>
+            Ser la mejor alternativa en mantenimiento, reparación y puesta en operación de obra civil,
+            estructural, eléctrica, mecánica, aire acondicionado, instrumentación, aislamiento térmico y
+            tubería de cobre y CPVC industrial, con buena planeación, el material adecuado, menor tiempo de
+            ejecución y un costo competitivo.
+          </p>
+        </div>
+      </div>
+
+      <div class="obj" data-reveal>
+        <h3 class="mono">Objetivos</h3>
+        <ol role="list">
+          {site.objectives.map((o, i) => (
+            <li><span class="mono">0{i + 1}</span>{o}</li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="lead" data-reveal>
+        <div class="lead__avatar" aria-hidden="true">JJ</div>
+        <div>
+          <p class="lead__name">{site.manager.displayName}</p>
+          <p class="mono lead__role">{site.manager.role}</p>
+        </div>
+        <a class="lead__mail" href={`mailto:${site.email}`}>{site.email}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about {
+    background: var(--paper);
+    color: var(--ink);
+  }
+  .about__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2.5rem, 7vw, 8rem);
+    align-items: start;
+  }
+  .about__media {
+    position: sticky;
+    top: 6.5rem;
+  }
+  .about__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  .seal {
+    position: absolute;
+    right: -2.5rem;
+    bottom: -2.5rem;
+    width: 9.5rem;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--navy-900);
+    color: var(--gold-400);
+    display: grid;
+    place-items: center;
+  }
+  .seal__ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    animation: spin 28s linear infinite;
+  }
+  .seal__ring text {
+    fill: var(--paper);
+    font-family: var(--mono);
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .seal__icon {
+    width: 46%;
+    height: auto;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .about__copy {
+    display: grid;
+    gap: clamp(2rem, 4vw, 3rem);
+  }
+  .eyebrow--ink {
+    color: var(--gold-600);
+  }
+  .about h2 {
+    font-size: min(var(--step-4), 4.75rem);
+  }
+  .about h2 em {
+    font-style: normal;
+    font-weight: 600;
+    color: var(--gold-600);
+  }
+  .about h3.mono {
+    color: var(--gold-600);
+    font-weight: 500;
+    margin-bottom: 0.9rem;
+  }
+  .mv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgb(10 22 48 / 0.14);
+  }
+  .mv p {
+    color: rgb(10 22 48 / 0.78);
+  }
+  .obj ol {
+    display: grid;
+    border-top: 1px solid rgb(10 22 48 / 0.14);
+  }
+  .obj li {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid rgb(10 22 48 / 0.14);
+    font-size: var(--step-1);
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+  .obj li .mono {
+    color: var(--gold-600);
+    padding-top: 0.35rem;
+  }
+  .lead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.25rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius);
+    background: var(--paper-2);
+  }
+  .lead__avatar {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 50%;
+    background: var(--navy-900);
+    color: var(--gold-400);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+  .lead__name {
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .lead__role {
+    color: rgb(10 22 48 / 0.6);
+  }
+  .lead__mail {
+    margin-left: auto;
+    font-weight: 500;
+    border-bottom: 1px solid var(--gold-500);
+  }
+  .about :focus-visible {
+    outline-color: var(--navy-900);
+  }
+  .about ::selection {
+    background: var(--navy-900);
+    color: var(--paper);
+  }
+
+  @media (max-width: 900px) {
+    .about__grid {
+      grid-template-columns: 1fr;
+    }
+    .about__media {
+      position: relative;
+      top: 0;
+      margin-bottom: 2rem;
+    }
+    .seal {
+      right: 1rem;
+      bottom: -2rem;
+      width: 7.5rem;
+    }
+    .mv {
+      grid-template-columns: 1fr;
+    }
+    .lead__mail {
+      margin-left: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .seal__ring {
+      animation: none;
+    }
+  }
+</style>

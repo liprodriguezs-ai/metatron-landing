@@ -1,0 +1,133 @@
+---
+import { Image } from 'astro:assets';
+import offshore from '../assets/img/hero-offshore.jpg';
+import onshore from '../assets/img/hero-onshore.jpg';
+
+const fronts = [
+  {
+    key: 'Offshore',
+    title: 'Costa afuera',
+    img: offshore,
+    alt: 'Plataforma de producción costa afuera iluminada en la Sonda de Campeche al anochecer',
+    text: 'Personal calificado y equipos especializados para entornos exigentes: mantenimiento eléctrico, aire acondicionado, aislamiento térmico y estructura en plataformas.',
+    coords: '19.42° N · 92.08° W',
+  },
+  {
+    key: 'Terrestre',
+    title: 'Tierra firme',
+    img: onshore,
+    alt: 'Instalación industrial costera iluminada con subestación, naves y paneles solares en Campeche',
+    text: 'Construcción, montaje y soporte para proyectos de gran escala: plantas, naves industriales, comercios e instituciones en Ciudad del Carmen y la región.',
+    coords: '18.64° N · 91.82° W',
+  },
+];
+---
+
+<section class="fronts" aria-labelledby="fronts-title">
+  <h2 id="fronts-title" class="sr-only">Frentes de trabajo: offshore y terrestre</h2>
+  <div class="fronts__row">
+    {
+      fronts.map((f, i) => (
+        <article class="front" tabindex="0" aria-labelledby={`front-${i}`}>
+          <Image
+            src={f.img}
+            alt={f.alt}
+            widths={[800, 1280, 1920]}
+            sizes="(max-width: 900px) 100vw, 60vw"
+            class="front__img"
+            format="avif"
+            quality={62}
+          />
+          <div class="front__shade" />
+          <div class="front__body">
+            <div class="front__top mono">
+              <span class="front__key">{f.key}</span>
+              <span>{f.coords}</span>
+            </div>
+            <div>
+              <h3 id={`front-${i}`} class="front__title">{f.title}</h3>
+              <p class="front__text">{f.text}</p>
+            </div>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .fronts {
+    padding-inline: var(--gutter);
+  }
+  .fronts__row {
+    display: flex;
+    gap: 0.75rem;
+    height: min(86vh, 54rem);
+    min-height: 34rem;
+    max-width: calc(var(--maxw) + 20rem);
+    margin-inline: auto;
+  }
+  .front {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+    border-radius: var(--radius);
+    transition: flex 1s var(--ease-out);
+    outline-offset: -3px;
+  }
+  .fronts__row:hover .front:hover,
+  .front:focus-visible {
+    flex: 1.7;
+  }
+  .front__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    transform: scale(1.04);
+    transition: transform 1.6s var(--ease-out);
+  }
+  .front:hover .front__img {
+    transform: scale(1);
+  }
+  .front__shade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(6 14 32 / 0.5), rgb(6 14 32 / 0) 35%, rgb(6 14 32 / 0.92));
+  }
+  .front__body {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: clamp(1.5rem, 3vw, 2.75rem);
+  }
+  .front__top {
+    display: flex;
+    justify-content: space-between;
+    color: var(--fg-muted);
+  }
+  .front__key {
+    color: var(--gold-400);
+  }
+  .front__title {
+    font-size: var(--step-4);
+    margin-bottom: 1rem;
+  }
+  .front__text {
+    max-width: 30rem;
+    color: var(--fg-muted);
+  }
+  @media (max-width: 900px) {
+    .fronts__row {
+      flex-direction: column;
+      height: auto;
+    }
+    .front {
+      min-height: 30rem;
+    }
+  }
+</style>

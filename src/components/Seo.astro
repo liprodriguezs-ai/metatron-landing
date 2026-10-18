@@ -1,0 +1,80 @@
+---
+import { site } from '../data/site';
+import { buildSchema } from '../lib/schema';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title = site.title,
+  description = site.description,
+  path = '/',
+  image = '/og/og-image.jpg',
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(path, site.url).href;
+const ogImage = new URL(image, site.url).href;
+const ogSquare = new URL('/og/og-square.jpg', site.url).href;
+const schema = JSON.stringify(buildSchema()).replace(/</g, '\\u003c');
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+<meta
+  name="robots"
+  content={noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1'}
+/>
+<link rel="alternate" hreflang="es-MX" href={canonical} />
+<link rel="alternate" hreflang="x-default" href={canonical} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link rel="alternate" type="text/markdown" title="LLM summary" href="/llms.txt" />
+
+<meta name="author" content={site.name} />
+<meta name="application-name" content={site.name} />
+<meta name="format-detection" content="telephone=yes" />
+
+<!-- Local / GEO -->
+<meta name="geo.region" content={site.address.regionCode} />
+<meta name="geo.placename" content={`${site.address.locality}, ${site.address.region}`} />
+<meta name="geo.position" content={`${site.geo.lat};${site.geo.lng}`} />
+<meta name="ICBM" content={`${site.geo.lat}, ${site.geo.lng}`} />
+
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.locale} />
+<meta property="og:url" content={canonical} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:secure_url" content={ogImage} />
+<meta property="og:image:type" content="image/jpeg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Metatron Service — mantenimiento y obras offshore y terrestres en Ciudad del Carmen, Campeche" />
+<meta property="og:image" content={ogSquare} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="1200" />
+<meta property="business:contact_data:street_address" content={site.address.street} />
+<meta property="business:contact_data:locality" content={site.address.locality} />
+<meta property="business:contact_data:region" content={site.address.region} />
+<meta property="business:contact_data:postal_code" content={site.address.postalCode} />
+<meta property="business:contact_data:country_name" content="México" />
+<meta property="business:contact_data:email" content={site.email} />
+<meta property="business:contact_data:phone_number" content={site.phone} />
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content="Metatron Service — mantenimiento y obras offshore y terrestres" />
+
+<script type="application/ld+json" set:html={schema} />

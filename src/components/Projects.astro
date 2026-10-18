@@ -1,0 +1,359 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import { works } from '../data/site';
+
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/obras/*.jpg', { eager: true });
+const byName = (name: string) => files[`../assets/obras/${name}.jpg`].default;
+
+const items = await Promise.all(
+  works.map(async (w) => {
+    const src = byName(w.file);
+    const full = await getImage({ src, width: Math.min(src.width, 1600), format: 'webp', quality: 80 });
+    return { ...w, src, full: full.src };
+  }),
+);
+const categories = ['Todos', ...new Set(works.map((w) => w.category))];
+---
+
+<section class="prj section" id="proyectos" aria-labelledby="prj-title">
+  <div class="wrap">
+    <header class="section-head prj__head">
+      <p class="eyebrow" data-reveal>Registro de obra</p>
+      <h2 id="prj-title" data-reveal style="--d:.08s">
+        Trabajo real, <span class="accent">en sitio.</span>
+      </h2>
+      <p class="prj__intro" data-reveal style="--d:.16s">
+        Fotografías de nuestros frentes de trabajo: subestaciones, azoteas solares, cuartos de máquinas,
+        techumbres y locales entregados.
+      </p>
+    </header>
+
+    <div class="prj__filters" role="group" aria-label="Filtrar proyectos por especialidad" data-reveal>
+      {
+        categories.map((c, i) => (
+          <button type="button" class="chip" aria-pressed={i === 0 ? 'true' : 'false'} data-filter={c}>
+            {c}
+          </button>
+        ))
+      }
+    </div>
+
+    <ul class="prj__grid" role="list" data-grid>
+      {
+        items.map((it, i) => (
+          <li class="tile" data-cat={it.category} style={`--r:${(it.src.height / it.src.width).toFixed(3)}`}>
+            <button
+              type="button"
+              class="tile__btn"
+              data-full={it.full}
+              data-alt={it.alt}
+              data-cat-label={it.category}
+              aria-label={`Ampliar: ${it.alt}`}
+            >
+              <Image
+                src={it.src}
+                alt={it.alt}
+                widths={[360, 560, 800]}
+                sizes="(max-width: 640px) 50vw, (max-width: 1100px) 33vw, 25vw"
+                class="tile__img"
+                format="avif"
+                quality={60}
+                loading={i < 4 ? 'eager' : 'lazy'}
+              />
+              <span class="tile__cap">
+                <span class="mono">{it.category}</span>
+                <span class="tile__alt">{it.alt}</span>
+              </span>
+            </button>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+
+  <dialog class="lb" data-lb aria-label="Fotografía ampliada">
+    <figure>
+      <img data-lb-img alt="" />
+      <figcaption>
+        <span class="mono" data-lb-cat></span>
+        <span data-lb-alt></span>
+        <span class="mono lb__count" data-lb-count></span>
+      </figcaption>
+    </figure>
+    <button type="button" class="lb__btn lb__prev" data-lb-prev aria-label="Foto anterior">←</button>
+    <button type="button" class="lb__btn lb__next" data-lb-next aria-label="Foto siguiente">→</button>
+    <button type="button" class="lb__btn lb__close" data-lb-close aria-label="Cerrar">✕</button>
+  </dialog>
+</section>
+
+<style>
+  .prj__head {
+    grid-template-columns: 1fr 1fr;
+    align-items: end;
+  }
+  .prj__head .eyebrow {
+    grid-column: 1 / -1;
+  }
+  .prj__intro {
+    justify-self: end;
+    max-width: 28rem;
+    color: var(--fg-muted);
+  }
+  .prj__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .chip {
+    padding: 0.55rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--fg-muted);
+    font: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition:
+      background 0.3s,
+      color 0.3s,
+      border-color 0.3s;
+  }
+  .chip:hover {
+    color: var(--paper);
+    border-color: var(--paper);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: var(--navy-950);
+    font-weight: 600;
+  }
+
+  .prj__grid {
+    columns: 4 16rem;
+    column-gap: 0.75rem;
+  }
+  .tile {
+    break-inside: avoid;
+    margin-bottom: 0.75rem;
+    animation: tileIn 0.7s var(--ease-out) both;
+  }
+  .tile[hidden] {
+    display: none;
+  }
+  @keyframes tileIn {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  .tile__btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--navy-900);
+    cursor: zoom-in;
+    aspect-ratio: 1 / var(--r);
+  }
+  .tile__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition:
+      transform 1.2s var(--ease-out),
+      filter 0.6s;
+    filter: saturate(0.85) contrast(1.02);
+  }
+  .tile__btn:hover .tile__img,
+  .tile__btn:focus-visible .tile__img {
+    transform: scale(1.05);
+    filter: saturate(1);
+  }
+  .tile__cap {
+    position: absolute;
+    inset: auto 0 0;
+    display: grid;
+    gap: 0.25rem;
+    padding: 2.5rem 1rem 1rem;
+    text-align: left;
+    color: var(--paper);
+    font-size: 0.85rem;
+    line-height: 1.35;
+    background: linear-gradient(transparent, rgb(6 14 32 / 0.92));
+    opacity: 0;
+    transform: translateY(8px);
+    transition:
+      opacity 0.5s var(--ease-out),
+      transform 0.5s var(--ease-out);
+  }
+  .tile__cap .mono {
+    color: var(--gold-400);
+  }
+  .tile__btn:hover .tile__cap,
+  .tile__btn:focus-visible .tile__cap {
+    opacity: 1;
+    transform: none;
+  }
+
+  .lb {
+    width: 100vw;
+    max-width: none;
+    height: 100vh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: rgb(4 10 24 / 0.96);
+    color: var(--paper);
+  }
+  .lb[open] {
+    display: grid;
+    place-items: center;
+  }
+  .lb::backdrop {
+    background: transparent;
+  }
+  .lb figure {
+    display: grid;
+    gap: 1rem;
+    max-width: min(92vw, 1400px);
+  }
+  .lb img {
+    max-height: 80vh;
+    width: auto;
+    margin-inline: auto;
+    border-radius: var(--radius);
+  }
+  .lb figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    align-items: baseline;
+    color: var(--fg-muted);
+  }
+  .lb figcaption .mono:first-child {
+    color: var(--gold-400);
+  }
+  .lb__count {
+    margin-left: auto;
+  }
+  .lb__btn {
+    position: fixed;
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: rgb(6 14 32 / 0.6);
+    color: var(--paper);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition:
+      background 0.3s,
+      color 0.3s;
+  }
+  .lb__btn:hover {
+    background: var(--paper);
+    color: var(--navy-950);
+  }
+  .lb__prev {
+    left: 1.25rem;
+    top: 50%;
+  }
+  .lb__next {
+    right: 1.25rem;
+    top: 50%;
+  }
+  .lb__close {
+    right: 1.25rem;
+    top: 1.25rem;
+  }
+  @media (max-width: 900px) {
+    .prj__head {
+      grid-template-columns: 1fr;
+    }
+    .prj__intro {
+      justify-self: start;
+    }
+    .prj__grid {
+      columns: 2 10rem;
+    }
+    .lb__prev,
+    .lb__next {
+      top: auto;
+      bottom: 1.25rem;
+    }
+  }
+</style>
+
+<script>
+  const grid = document.querySelector<HTMLElement>('[data-grid]')!;
+  const tiles = [...grid.querySelectorAll<HTMLElement>('.tile')];
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+
+  chips.forEach((chip) =>
+    chip.addEventListener('click', () => {
+      const f = chip.dataset.filter!;
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      tiles.forEach((t) => {
+        t.hidden = f !== 'Todos' && t.dataset.cat !== f;
+        if (!t.hidden) {
+          t.style.animation = 'none';
+          void t.offsetWidth;
+          t.style.animation = '';
+        }
+      });
+    }),
+  );
+
+  const lb = document.querySelector<HTMLDialogElement>('[data-lb]')!;
+  const img = lb.querySelector<HTMLImageElement>('[data-lb-img]')!;
+  const cat = lb.querySelector<HTMLElement>('[data-lb-cat]')!;
+  const alt = lb.querySelector<HTMLElement>('[data-lb-alt]')!;
+  const count = lb.querySelector<HTMLElement>('[data-lb-count]')!;
+  let list: HTMLButtonElement[] = [];
+  let at = 0;
+  let opener: HTMLElement | null = null;
+
+  const show = (i: number) => {
+    at = (i + list.length) % list.length;
+    const b = list[at];
+    img.src = b.dataset.full!;
+    img.alt = b.dataset.alt!;
+    cat.textContent = b.dataset.catLabel!;
+    alt.textContent = b.dataset.alt!;
+    count.textContent = `${String(at + 1).padStart(2, '0')} / ${String(list.length).padStart(2, '0')}`;
+  };
+  const lenis = () => (window as unknown as { __lenis?: { stop(): void; start(): void } }).__lenis;
+
+  grid.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('.tile__btn');
+    if (!b) return;
+    list = tiles.filter((t) => !t.hidden).map((t) => t.querySelector<HTMLButtonElement>('.tile__btn')!);
+    opener = b;
+    show(list.indexOf(b));
+    lb.showModal();
+    lenis()?.stop();
+  });
+  lb.querySelector('[data-lb-prev]')!.addEventListener('click', () => show(at - 1));
+  lb.querySelector('[data-lb-next]')!.addEventListener('click', () => show(at + 1));
+  lb.querySelector('[data-lb-close]')!.addEventListener('click', () => lb.close());
+  lb.addEventListener('click', (e) => {
+    if (e.target === lb) lb.close();
+  });
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') show(at - 1);
+    if (e.key === 'ArrowRight') show(at + 1);
+  });
+  lb.addEventListener('close', () => {
+    lenis()?.start();
+    opener?.focus();
+  });
+</script>

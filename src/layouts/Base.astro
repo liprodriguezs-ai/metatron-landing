@@ -1,0 +1,65 @@
+---
+import { Font } from 'astro:assets';
+import Seo from '../components/Seo.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+  noindex?: boolean;
+}
+
+const props = Astro.props;
+---
+
+<!doctype html>
+<html lang="es-MX">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#060e20" />
+    <meta name="color-scheme" content="dark" />
+    <Font cssVariable="--font-sans" preload={[{ weight: 300 }, { weight: 400 }]} />
+    <Font cssVariable="--font-mono" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <Seo {...props} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <slot />
+    <script>
+      import Lenis from 'lenis';
+
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!reduce) {
+        const lenis = new Lenis({ lerp: 0.09, smoothWheel: true, anchors: { offset: -72 } });
+        (window as unknown as { __lenis: Lenis }).__lenis = lenis;
+        const raf = (t: number) => {
+          lenis.raf(t);
+          requestAnimationFrame(raf);
+        };
+        requestAnimationFrame(raf);
+      }
+
+      // Reveal-on-scroll
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-in');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.12 },
+      );
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

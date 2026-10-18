@@ -1,0 +1,502 @@
+---
+import { getImage } from 'astro:assets';
+import frameDesktop from '../assets/img/frame-inicio.jpg';
+import frameMobile from '../assets/img/frame-inicio-movil.jpg';
+import { services, site, whatsappUrl } from '../data/site';
+
+const [d1, d2, d3, m1] = await Promise.all([
+  getImage({ src: frameDesktop, width: 1920, format: 'avif', quality: 62 }),
+  getImage({ src: frameDesktop, width: 1280, format: 'avif', quality: 60 }),
+  getImage({ src: frameDesktop, width: 1600, format: 'avif', quality: 60 }),
+  getImage({ src: frameMobile, width: 608, format: 'avif', quality: 62 }),
+]);
+const fallback = await getImage({ src: frameDesktop, width: 1600, format: 'jpg', quality: 72 });
+---
+
+<section class="hero" id="inicio" data-hero aria-labelledby="hero-title">
+  <div class="hero__sticky">
+    <div class="hero__media" aria-hidden="true">
+      <picture>
+        <source media="(max-aspect-ratio: 4/5)" srcset={m1.src} type="image/avif" />
+        <source srcset={`${d2.src} 1280w, ${d3.src} 1600w, ${d1.src} 1920w`} sizes="100vw" type="image/avif" />
+        <img
+          class="hero__poster"
+          src={fallback.src}
+          width="1600"
+          height="900"
+          alt=""
+          fetchpriority="high"
+          decoding="async"
+        />
+      </picture>
+      <video
+        class="hero__video"
+        muted
+        playsinline
+        preload="none"
+        disablepictureinpicture
+        tabindex="-1"
+        data-desktop="/media/transicion.mp4"
+        data-mobile="/media/transicion-movil.mp4"
+      ></video>
+      <div class="hero__shade"></div>
+    </div>
+
+    <div class="hero__stages wrap">
+      <div class="stage stage--1" data-stage data-in="-1" data-out="0.3">
+        <p class="eyebrow">Ciudad del Carmen · Campeche</p>
+        <h1 id="hero-title" class="hero__title">
+          <span class="ln">Mantenimiento</span>
+          <span class="ln">y obras <span class="accent">offshore</span></span>
+          <span class="ln">y terrestres.</span>
+        </h1>
+        <p class="hero__lead" id="resumen">
+          Obra eléctrica, sistemas fotovoltaicos, aire acondicionado, aislamiento térmico, obra civil y
+          estructural para la industria, desde la Sonda de Campeche hasta tierra firme.
+        </p>
+        <div class="hero__actions">
+          <a class="btn" href="#contacto">
+            Cotizar proyecto
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"
+              ><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+            >
+          </a>
+          <a class="btn btn--ghost" href="#servicios">Ver especialidades</a>
+        </div>
+      </div>
+
+      <div class="stage stage--2" data-stage data-in="0.34" data-out="0.64">
+        <p class="eyebrow">Costa afuera</p>
+        <p class="hero__claim">
+          Fuerza, compromiso <br />y <span class="accent">experiencia</span> que <br />construye confianza.
+        </p>
+      </div>
+
+      <div class="stage stage--3" data-stage data-in="0.7" data-out="2">
+        <p class="eyebrow">Tierra firme</p>
+        <p class="hero__claim">
+          Del mar a tierra, <br /><span class="accent">un mismo estándar.</span>
+        </p>
+        <ul class="hero__chips" role="list">
+          {services.map((s) => <li><a href={`#${s.id}`}>{s.name}</a></li>)}
+        </ul>
+        <div class="hero__actions">
+          <a class="btn" href={whatsappUrl()} target="_blank" rel="noopener">
+            Escribir por WhatsApp
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"
+              ><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+            >
+          </a>
+          <a class="btn btn--ghost" href={`tel:${site.phone}`}>{site.phoneDisplay}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hud" aria-hidden="true">
+      <div class="hud__coords mono">
+        <span class="hud__label">Posición</span>
+        <span data-lat>19.4200° N</span>
+        <span data-lng>92.0800° W</span>
+      </div>
+      <div class="hud__rail">
+        <span class="mono">Offshore</span>
+        <div class="hud__track"><i data-rail></i></div>
+        <span class="mono">Terrestre</span>
+      </div>
+      <div class="hud__load mono" data-load><span data-load-pct>0</span>% secuencia</div>
+    </div>
+
+    <div class="hero__cue mono" data-cue aria-hidden="true">
+      <span>Desplázate</span>
+      <i></i>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    height: 420vh;
+    height: 420svh;
+    background: var(--navy-950);
+  }
+  .hero__sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100svh;
+    overflow: hidden;
+  }
+  .hero__media,
+  .hero__poster,
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hero__video {
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-out);
+  }
+  .hero.is-ready .hero__video {
+    opacity: 1;
+  }
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(6 14 32 / 0.88) 0%, rgb(6 14 32 / 0.55) 34%, rgb(6 14 32 / 0) 62%),
+      linear-gradient(180deg, rgb(6 14 32 / 0.55) 0%, rgb(6 14 32 / 0) 22%, rgb(6 14 32 / 0) 70%, rgb(6 14 32 / 0.9) 100%);
+  }
+
+  .hero__stages {
+    position: relative;
+    height: 100%;
+  }
+  .stage {
+    position: absolute;
+    inset: 0 var(--gutter);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.75rem;
+    max-width: 56rem;
+    padding-top: 4.75rem;
+    padding-bottom: 5.5rem;
+    will-change: opacity, transform;
+  }
+  /* The first stage is top-anchored so late font swaps below the title never move it (CLS). */
+  .stage--1 {
+    justify-content: flex-start;
+    padding-top: max(6.5rem, 23vh);
+  }
+  .stage--2,
+  .stage--3 {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .hero__title {
+    font-size: min(clamp(2.25rem, 10.5vw, 7.25rem), 10.5vh);
+    line-height: 0.94;
+    font-weight: 300;
+  }
+  /* Fixed line breaks: the title height never depends on font metrics (no CLS on font swap). */
+  .hero__title .ln {
+    display: block;
+    white-space: nowrap;
+  }
+  .hero__claim {
+    font-size: min(var(--step-4), 9.5vh);
+    line-height: 0.98;
+    font-weight: 300;
+    letter-spacing: -0.035em;
+  }
+  .hero__lead {
+    max-width: 36rem;
+    color: var(--fg-muted);
+    font-size: clamp(1.05rem, 0.9rem + 0.5vw, 1.35rem);
+    line-height: 1.45;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .hero__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    max-width: 40rem;
+  }
+  .hero__chips a {
+    display: inline-block;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    color: var(--fg-muted);
+    background: rgb(6 14 32 / 0.35);
+    backdrop-filter: blur(6px);
+    transition:
+      color 0.3s,
+      border-color 0.3s;
+  }
+  .hero__chips a:hover {
+    color: var(--gold-400);
+    border-color: var(--gold-500);
+  }
+
+  .hud {
+    position: absolute;
+    inset: auto var(--gutter) 2rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 2rem;
+    pointer-events: none;
+    color: var(--fg-dim);
+  }
+  .hud__coords {
+    display: grid;
+    gap: 0.2rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--fg-muted);
+  }
+  .hud__label {
+    color: var(--gold-400);
+  }
+  .hud__rail {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hud__track {
+    position: relative;
+    width: clamp(8rem, 18vw, 16rem);
+    height: 1px;
+    background: var(--line-strong);
+  }
+  .hud__track i {
+    position: absolute;
+    inset: 0;
+    background: var(--gold-400);
+    transform-origin: left;
+    transform: scaleX(var(--p, 0));
+  }
+  .hud__track i::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: -4px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--gold-400);
+    box-shadow: 0 0 0 4px rgb(227 162 26 / 0.18);
+  }
+  .hud__load {
+    position: absolute;
+    right: 0;
+    bottom: 2rem;
+    transition: opacity 0.6s;
+  }
+  .hero.is-ready .hud__load {
+    opacity: 0;
+  }
+
+  .hero__cue {
+    position: absolute;
+    left: 50%;
+    bottom: 2rem;
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    transform: translateX(-50%);
+    color: var(--fg-dim);
+    transition: opacity 0.5s;
+  }
+  .hero__cue i {
+    width: 1px;
+    height: 2.75rem;
+    background: linear-gradient(var(--gold-400), transparent);
+    animation: cue 2.2s var(--ease-io) infinite;
+    transform-origin: top;
+  }
+  @keyframes cue {
+    0% {
+      transform: scaleY(0);
+    }
+    50% {
+      transform: scaleY(1);
+      transform-origin: top;
+    }
+    51% {
+      transform-origin: bottom;
+    }
+    100% {
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero__cue {
+      display: none;
+    }
+    .hud {
+      bottom: 1.25rem;
+    }
+    .hud__load {
+      display: none;
+    }
+  }
+  @media (max-aspect-ratio: 4/5) {
+    .hero__shade {
+      background:
+        linear-gradient(180deg, rgb(6 14 32 / 0.7) 0%, rgb(6 14 32 / 0.1) 22%, rgb(6 14 32 / 0.72) 45%, rgb(6 14 32 / 0.92) 70%, rgb(6 14 32 / 0.97) 100%);
+    }
+    .stage {
+      justify-content: flex-end;
+      padding-bottom: 6.5rem;
+      gap: 1.25rem;
+    }
+    .stage--1 {
+      justify-content: flex-start;
+      padding-top: max(6rem, calc(100svh - 35rem));
+    }
+    .hud__coords {
+      display: none;
+    }
+    .hud {
+      justify-content: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero {
+      height: auto;
+    }
+    .hero__sticky {
+      position: relative;
+      min-height: 100svh;
+    }
+    .stage--2,
+    .stage--3,
+    .hud,
+    .hero__cue {
+      display: none;
+    }
+    .stage--1 {
+      position: relative;
+      inset: auto;
+      min-height: 100svh;
+    }
+  }
+</style>
+
+<script>
+  const hero = document.querySelector<HTMLElement>('[data-hero]')!;
+  const video = hero.querySelector<HTMLVideoElement>('video')!;
+  const stages = [...hero.querySelectorAll<HTMLElement>('[data-stage]')].map((el) => ({
+    el,
+    a: Number(el.dataset.in),
+    b: Number(el.dataset.out),
+  }));
+  const rail = hero.querySelector<HTMLElement>('[data-rail]')!;
+  const latEl = hero.querySelector<HTMLElement>('[data-lat]')!;
+  const lngEl = hero.querySelector<HTMLElement>('[data-lng]')!;
+  const cue = hero.querySelector<HTMLElement>('[data-cue]')!;
+  const pctEl = hero.querySelector<HTMLElement>('[data-load-pct]')!;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  const lite = !!conn?.saveData || /(^|-)2g$/.test(conn?.effectiveType ?? '');
+
+  // Offshore (Sonda de Campeche) -> onshore (Ciudad del Carmen)
+  const FROM = { lat: 19.42, lng: 92.08 };
+  const TO = { lat: 18.6456, lng: 91.8295 };
+
+  const clamp = (v: number, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const smooth = (t: number) => {
+    const x = clamp(t);
+    return x * x * (3 - 2 * x);
+  };
+
+  let duration = 0;
+  let current = 0;
+  let inView = true;
+
+  const progress = () => {
+    const r = hero.getBoundingClientRect();
+    const total = r.height - window.innerHeight;
+    return total > 0 ? clamp(-r.top / total) : 0;
+  };
+
+  const render = () => {
+    const p = progress();
+    const F = 0.07;
+    for (const s of stages) {
+      const fadeIn = s.a < 0 ? 1 : smooth((p - s.a) / F);
+      const fadeOut = s.b > 1 ? 1 : smooth((s.b - p) / F);
+      const alpha = Math.min(fadeIn, fadeOut);
+      const dir = fadeIn < 1 ? 1 : -1;
+      s.el.style.opacity = alpha.toFixed(3);
+      s.el.style.transform = `translate3d(0, ${((1 - alpha) * 36 * dir).toFixed(1)}px, 0)`;
+      s.el.style.visibility = alpha < 0.01 ? 'hidden' : 'visible';
+      s.el.style.pointerEvents = alpha < 0.5 ? 'none' : 'auto';
+    }
+    rail.style.setProperty('--p', p.toFixed(4));
+    latEl.textContent = `${(FROM.lat + (TO.lat - FROM.lat) * p).toFixed(4)}° N`;
+    lngEl.textContent = `${(FROM.lng + (TO.lng - FROM.lng) * p).toFixed(4)}° W`;
+    cue.style.opacity = p > 0.03 ? '0' : '1';
+
+    if (duration > 0) {
+      const target = p * (duration - 0.05);
+      current += (target - current) * 0.16;
+      if (Math.abs(video.currentTime - current) > 0.01 && !video.seeking) {
+        video.currentTime = current;
+      }
+    }
+  };
+
+  const loop = () => {
+    if (inView) render();
+    requestAnimationFrame(loop);
+  };
+
+  const loadVideo = async () => {
+    const mobile = window.matchMedia('(max-aspect-ratio: 4/5)').matches;
+    const src = mobile ? video.dataset.mobile! : video.dataset.desktop!;
+    try {
+      const res = await fetch(src);
+      const total = Number(res.headers.get('content-length')) || 0;
+      let blob: Blob;
+      if (res.body && total) {
+        const reader = res.body.getReader();
+        const chunks: Uint8Array[] = [];
+        let got = 0;
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          got += value.length;
+          pctEl.textContent = String(Math.round((got / total) * 100));
+        }
+        blob = new Blob(chunks as BlobPart[], { type: 'video/mp4' });
+      } else {
+        blob = await res.blob();
+      }
+      video.src = URL.createObjectURL(blob);
+    } catch {
+      video.src = src; // Streaming fallback
+    }
+    video.addEventListener(
+      'loadeddata',
+      () => {
+        duration = video.duration || 10;
+        current = progress() * duration;
+        video.currentTime = current;
+        // iOS needs a play/pause gesture-less unlock before seeks paint frames.
+        video
+          .play()
+          .then(() => video.pause())
+          .catch(() => {});
+        hero.classList.add('is-ready');
+      },
+      { once: true },
+    );
+    video.load();
+  };
+
+  if (!reduce) {
+    new IntersectionObserver(([e]) => (inView = e.isIntersecting)).observe(hero);
+    requestAnimationFrame(loop);
+    if (!lite) {
+      const start = () => loadVideo();
+      if (document.readyState === 'complete') start();
+      else window.addEventListener('load', start, { once: true });
+    }
+  }
+</script>
