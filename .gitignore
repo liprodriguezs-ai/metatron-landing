@@ -1,0 +1,12 @@
+dist/
+.astro/
+node_modules/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+.codegraph/
+.playwright-mcp/
+tools/brand/out/
+tools/brand/fonts/
