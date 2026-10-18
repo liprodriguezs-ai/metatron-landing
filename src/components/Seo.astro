@@ -19,8 +19,20 @@ const {
 } = Astro.props;
 
 const canonical = new URL(path, site.url).href;
-const ogImage = new URL(image, site.url).href;
-const ogSquare = new URL('/og/og-square.jpg', site.url).href;
+
+// Share previews (WhatsApp, Facebook, LinkedIn, X) must fetch real, reachable URLs. The production
+// build uses the configured domain; in dev (e.g. behind a Cloudflare tunnel) use the requesting host
+// so link previews work before the domain is live.
+// (Astro strips request headers on prerendered pages, so the host comes from Astro.url; tunnels serve HTTPS.)
+const shareBase = (() => {
+  if (!import.meta.env.DEV) return site.url;
+  const { host, hostname } = Astro.url;
+  const local = hostname === 'localhost' || hostname === '127.0.0.1';
+  return `${local ? 'http' : 'https'}://${host}`;
+})();
+const shareUrl = new URL(path, shareBase).href;
+const ogImage = new URL(image, shareBase).href;
+const ogSquare = new URL('/og/og-square.jpg', shareBase).href;
 const schema = JSON.stringify(buildSchema()).replace(/</g, '\\u003c');
 ---
 
@@ -50,7 +62,7 @@ const schema = JSON.stringify(buildSchema()).replace(/</g, '\\u003c');
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={site.name} />
 <meta property="og:locale" content={site.locale} />
-<meta property="og:url" content={canonical} />
+<meta property="og:url" content={shareUrl} />
 <meta property="og:title" content={title} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImage} />
