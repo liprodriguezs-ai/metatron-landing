@@ -40,7 +40,7 @@ export default defineConfig({
     responsiveStyles: true,
   },
   build: {
-    inlineStylesheets: 'auto',
+    inlineStylesheets: 'always',
   },
   prefetch: false,
 });

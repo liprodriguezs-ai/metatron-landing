@@ -9,6 +9,8 @@
   --gold-500: #e3a21a;
   --gold-400: #f0b73a;
   --gold-200: #f8dc9a;
+  /* Gold for text on light (paper) backgrounds: 5.6:1 on --paper */
+  --gold-ink: #8a5a00;
   --paper: #f7f3ea;
   --paper-2: #efe9dc;
   --ink: #0a1630;
