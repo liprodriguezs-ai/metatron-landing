@@ -1,6 +1,6 @@
 ---
 import Logo from '../assets/brand/logo-stacked-dark.svg';
-import { mapsUrl, services, site, whatsappUrl } from '../data/site';
+import { services, site, whatsappUrl } from '../data/site';
 
 const year = new Date().getFullYear();
 ---
@@ -26,11 +26,6 @@ const year = new Date().getFullYear();
         <h2 class="mono">Contacto</h2>
         <address>
           <p><strong>{site.name}</strong></p>
-          <p>
-            <a href={mapsUrl} target="_blank" rel="noopener">
-              {site.address.street}<br />C.P. {site.address.postalCode}, {site.address.locality}, {site.address.region}, México
-            </a>
-          </p>
           <p><a href={`tel:${site.phone}`}>Tel. {site.phoneDisplay}</a></p>
           <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
         </address>
@@ -41,7 +36,6 @@ const year = new Date().getFullYear();
         <ul role="list">
           <li>México (proyectos terrestres)</li>
           <li>Golfo de México (offshore)</li>
-          <li>Oficina base: Ciudad del Carmen, Campeche</li>
         </ul>
         <a class="btn ftr__btn" href={whatsappUrl()} target="_blank" rel="noopener">WhatsApp</a>
       </div>

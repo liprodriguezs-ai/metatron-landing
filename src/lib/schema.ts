@@ -1,4 +1,4 @@
-import { site, services, faqs, otherSpecialties, mapsUrl } from '../data/site';
+import { site, services, faqs, otherSpecialties } from '../data/site';
 
 const abs = (path: string) => new URL(path, site.url).href;
 
@@ -10,13 +10,10 @@ export function buildSchema() {
   const pageId = abs('/#webpage');
   const personId = abs('/#gerente');
 
+  // Country only: the office location is intentionally not published.
   const address = {
     '@type': 'PostalAddress',
-    streetAddress: site.address.street,
-    addressLocality: site.address.locality,
-    addressRegion: site.address.region,
-    postalCode: site.address.postalCode,
-    addressCountry: site.address.country,
+    addressCountry: site.country,
   };
 
   const serviceNodes = services.map((s) => ({
@@ -79,8 +76,6 @@ export function buildSchema() {
         telephone: site.phone,
         email: site.email,
         address,
-        geo: { '@type': 'GeoCoordinates', latitude: site.geo.lat, longitude: site.geo.lng },
-        hasMap: mapsUrl,
         areaServed: site.areaServed.map((name) => ({ '@type': 'Place', name })),
         parentOrganization: { '@id': orgId },
         employee: { '@id': personId },

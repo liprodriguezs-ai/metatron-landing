@@ -44,10 +44,10 @@ stay there, so the site is attached through Cloudflare for SaaS on the `novarek.
 
 ## Before going live
 
-1. Confirm the business data in `src/data/site.ts` (phone, address, coordinates). The coordinates are
-   city-level for Ciudad del Carmen; replace them with the exact office pin if available.
+1. Confirm the business data in `src/data/site.ts` (phone, email). The office location is intentionally not
+   published anywhere (page, JSON-LD, meta tags, llms.txt); only the country is exposed.
 2. Register the site in Google Search Console and Bing Webmaster Tools and submit `/sitemap-index.xml`.
-3. Create or claim the Google Business Profile with the same name, address and phone (NAP) as the site.
+3. Create or claim the Google Business Profile as a service-area business (address hidden), with the same name and phone as the site.
 
 ## Structure
 
@@ -68,7 +68,7 @@ stay there, so the site is attached through Cloudflare for SaaS on the `novarek.
 
 - One `h1`, semantic sections, descriptive `alt` text on every content image.
 - Canonical, `hreflang` es-MX + x-default, robots meta with large image previews.
-- Local SEO: `geo.region`, `geo.placename`, `geo.position`, `ICBM`, consistent NAP in footer and schema.
+- Local SEO: country-level `geo.region` / `geo.placename`, consistent name and phone in footer and schema (no office address).
 - JSON-LD: `Organization`, `LocalBusiness`/`GeneralContractor`, `Person`, six `Service`, `WebSite`,
   `WebPage` (with `speakable`) and `FAQPage`.
 - `sitemap-index.xml`, `robots.txt`, `llms.txt`, `llms-full.txt`, web manifest, favicons and maskable icon.

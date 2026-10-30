@@ -1,15 +1,13 @@
 import { faqs, otherSpecialties, process, services, site } from '../data/site';
 
 const abs = (p: string) => new URL(p, site.url).href;
-const addr = `${site.address.street}, C.P. ${site.address.postalCode}, ${site.address.locality}, ${site.address.region}, México`;
 
 /** llms.txt — concise, link-first summary (https://llmstxt.org). */
 export function llmsTxt() {
   return `# ${site.name}
 
-> ${site.name} es una empresa mexicana de mantenimiento y obras offshore (costa afuera) y terrestres que atiende proyectos en México, con oficina base en Ciudad del Carmen, Campeche. Ofrece obra eléctrica, sistemas fotovoltaicos, aire acondicionado, aislamiento térmico, obra civil y obra estructural para la industria.
+> ${site.name} es una empresa mexicana de mantenimiento y obras offshore (costa afuera) y terrestres que atiende proyectos en México. Ofrece obra eléctrica, sistemas fotovoltaicos, aire acondicionado, aislamiento térmico, obra civil y obra estructural para la industria.
 
-- Ubicación: ${addr}
 - Teléfono / WhatsApp: ${site.phoneDisplay} (${site.phone})
 - Correo: ${site.email}
 - Responsable: ${site.manager.displayName}, ${site.manager.role}
@@ -38,7 +36,6 @@ ${site.description}
 
 - Nombre: ${site.name}
 - Giro: mantenimiento industrial, reparación, construcción y puesta en operación (offshore y terrestre)
-- Dirección: ${addr}
 - Teléfono y WhatsApp: ${site.phoneDisplay} (${site.phone})
 - Correo electrónico: ${site.email}
 - Gerente de Proyectos: ${site.manager.displayName}

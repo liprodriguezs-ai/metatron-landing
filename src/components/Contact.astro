@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import finalFrame from '../assets/img/frame-final.jpg';
-import { mapsUrl, services, site, whatsappUrl } from '../data/site';
+import { services, site, whatsappUrl } from '../data/site';
 ---
 
 <section class="cta" id="contacto" aria-labelledby="cta-title">
@@ -36,12 +36,6 @@ import { mapsUrl, services, site, whatsappUrl } from '../data/site';
         <li data-reveal style="--d:.06s">
           <span class="mono">Correo</span>
           <a href={`mailto:${site.email}`}>{site.email}</a>
-        </li>
-        <li data-reveal style="--d:.12s">
-          <span class="mono">Oficina</span>
-          <a href={mapsUrl} target="_blank" rel="noopener">
-            {site.address.street}, C.P. {site.address.postalCode}, {site.address.locality}, {site.address.region}
-          </a>
         </li>
       </ul>
     </div>

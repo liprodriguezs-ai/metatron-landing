@@ -17,16 +17,8 @@ export const site = {
   phoneDisplay: '938 183 8455',
   whatsapp: '529381838455',
   email: 'jimenez.metatron@gmail.com',
-  address: {
-    street: 'Calle San Pedro 28, Fraccionamiento San Joaquín',
-    locality: 'Ciudad del Carmen',
-    region: 'Campeche',
-    regionCode: 'MX-CAM',
-    postalCode: '24157',
-    country: 'MX',
-  },
-  // Approximate city-level coordinates for Ciudad del Carmen, Campeche.
-  geo: { lat: 18.6456, lng: -91.8295 },
+  // The office location is intentionally not published; only the country is exposed.
+  country: 'MX',
   manager: {
     name: 'José Antonio Jiménez Santos',
     displayName: 'Ing. José Antonio Jiménez',
@@ -48,10 +40,6 @@ export const site = {
 
 export const whatsappUrl = (text = 'Hola Metatron Service, me gustaría cotizar un proyecto.') =>
   `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
-
-export const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-  `${site.address.street}, ${site.address.postalCode} ${site.address.locality}, ${site.address.region}`,
-)}`;
 
 export type Service = {
   id: string;
@@ -242,7 +230,7 @@ export const faqs = [
   },
   {
     q: '¿Dónde opera Metatron Service?',
-    a: 'Metatron Service atiende proyectos de mantenimiento y obra en México, tanto terrestres como offshore (costa afuera) en el Golfo de México. Su oficina base está en Ciudad del Carmen, Campeche.',
+    a: 'Metatron Service atiende proyectos de mantenimiento y obra en México, tanto terrestres como offshore (costa afuera) en el Golfo de México.',
   },
   {
     q: '¿Realizan trabajos offshore o costa afuera?',
