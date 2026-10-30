@@ -11,16 +11,44 @@ pnpm dev        # http://localhost:4321
 pnpm build      # static site in dist/
 pnpm preview
 pnpm check      # astro check (needs TypeScript 6, pinned)
+pnpm run deploy # publish dist/ to the metatron-landing Worker (run build first)
 ```
+
+## Deploy
+
+Production runs on Cloudflare Workers (static assets) as the Worker `metatron-landing` (account li.prodriguezs),
+auto-deployed by Workers Builds on every push to the production branch. Dashboard settings for the Worker's
+Builds section:
+
+| Setting | Value |
+| --- | --- |
+| Repository | `liprodriguezs-ai/metatron` |
+| Build command | `pnpm run build` (builds only) |
+| Deploy command | `pnpm run deploy` (`wrangler deploy`, publishes only) |
+| Root directory | `/` |
+| Builds for non-production branches | off |
+
+`wrangler.jsonc` deliberately has no `routes` or custom domains; add domains in the dashboard (Worker →
+Domains). Node version for builds comes from `.node-version` (Astro 7 needs Node ≥ 22.22).
+
+## Domains
+
+`SITE_URL` (`src/data/site-url.mjs`) is `https://www.metatronservice.com`: it drives canonical URLs, sitemap,
+Open Graph, JSON-LD, `robots.txt` and `llms.txt`. The domain is registered at Hostinger and its nameservers
+stay there, so the site is attached through Cloudflare for SaaS on the `novarek.mx` zone (same setup as herraga).
+
+| Host | Served by |
+| --- | --- |
+| `www.metatronservice.com` | Cloudflare for SaaS custom hostname on the `novarek.mx` zone (fallback origin `saas.novarek.mx`), Worker route `www.metatronservice.com/*` → `metatron-landing`. Hostinger DNS: `CNAME www → saas.novarek.mx` plus the TXT validation records Cloudflare asks for. |
+| `metatronservice.com` | Hostinger redirect → `https://www.metatronservice.com`. |
+| `metatron.novarek.mx` | Worker custom domain on `metatron-landing` (preview / fallback). |
 
 ## Before going live
 
-1. Set the final domain in `src/data/site-url.mjs` (`SITE_URL`). It feeds canonical URLs, sitemap,
-   Open Graph, JSON-LD, `robots.txt` and `llms.txt`.
-2. Confirm the business data in `src/data/site.ts` (phone, address, coordinates). The coordinates are
+1. Confirm the business data in `src/data/site.ts` (phone, address, coordinates). The coordinates are
    city-level for Ciudad del Carmen; replace them with the exact office pin if available.
-3. Register the site in Google Search Console and Bing Webmaster Tools and submit `/sitemap-index.xml`.
-4. Create or claim the Google Business Profile with the same name, address and phone (NAP) as the site.
+2. Register the site in Google Search Console and Bing Webmaster Tools and submit `/sitemap-index.xml`.
+3. Create or claim the Google Business Profile with the same name, address and phone (NAP) as the site.
 
 ## Structure
 

@@ -1,0 +1,11 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Must match the Worker name created in the Cloudflare dashboard (Workers Builds).
+  "name": "metatron-landing",
+  "compatibility_date": "2026-10-30",
+  // Static Astro build (pnpm run build -> dist/). No routes or custom domains here:
+  // domains are managed in the dashboard so a deploy never takes or drops a hostname.
+  "assets": {
+    "directory": "./dist"
+  }
+}
