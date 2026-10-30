@@ -5,6 +5,9 @@ import { SITE_URL } from './src/data/site-url.mjs';
 
 export default defineConfig({
   site: SITE_URL,
+  // Versioned so Workers Builds reuses optimized images instead of re-encoding ~220 AVIF/WebP
+  // variants on every deploy (the first CI build otherwise approaches the 20-minute limit).
+  cacheDir: './.astro-cache',
   trailingSlash: 'ignore',
   // Dev/preview only: allow Cloudflare quick tunnels (random *.trycloudflare.com names) for remote review.
   server: {
