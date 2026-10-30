@@ -42,7 +42,7 @@ import { services, site, whatsappUrl } from '../data/site';
 
     <form class="quote" data-quote data-reveal style="--d:.1s" novalidate>
       <h3 class="quote__title">Solicitud de cotización</h3>
-      <p class="quote__hint">Se envía directo por WhatsApp o correo. No guardamos tus datos.</p>
+      <p class="quote__hint">Se envía directo por WhatsApp. No guardamos tus datos.</p>
 
       <div class="field">
         <label for="q-name">Nombre</label>
@@ -76,13 +76,12 @@ import { services, site, whatsappUrl } from '../data/site';
       <p class="quote__err" role="alert" data-err hidden>Completa tu nombre y el alcance del trabajo.</p>
 
       <div class="quote__actions">
-        <button class="btn" type="submit" value="wa">
+        <button class="btn" type="submit">
           Enviar por WhatsApp
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"
             ><path d="M5 12h14M13 6l6 6-6 6"></path></svg
           >
         </button>
-        <button class="btn btn--ghost" type="submit" value="mail">Enviar por correo</button>
       </div>
     </form>
   </div>
@@ -299,7 +298,6 @@ import { services, site, whatsappUrl } from '../data/site';
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
-    const via = ((e as SubmitEvent).submitter as HTMLButtonElement | null)?.value ?? 'wa';
     const d = new FormData(form);
     const nombre = String(d.get('nombre') ?? '').trim();
     const mensaje = String(d.get('mensaje') ?? '').trim();
@@ -314,10 +312,6 @@ import { services, site, whatsappUrl } from '../data/site';
     if (empresa) lines.push(`Empresa: ${empresa}`);
     lines.push(`Instalación: ${d.get('frente')}`, `Especialidad: ${d.get('servicio')}`, `Alcance: ${mensaje}`);
     const text = lines.join('\n');
-    const url =
-      via === 'mail'
-        ? `mailto:${site.email}?subject=${encodeURIComponent(`Cotización — ${d.get('servicio')}`)}&body=${encodeURIComponent(text)}`
-        : `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`;
-    window.open(url, via === 'mail' ? '_self' : '_blank', 'noopener');
+    window.open(`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
   });
 </script>
