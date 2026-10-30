@@ -44,6 +44,12 @@ const year = new Date().getFullYear();
     <div class="ftr__bottom mono">
       <span>© {year} {site.name}. Todos los derechos reservados.</span>
       <span>Calidad · Seguridad · Compromiso</span>
+      <p class="ftr__credit">
+        Powered by
+        <a href="https://novarek.mx/" target="_blank" rel="noopener">
+          <img src="/novarek-logo.svg" width="284" height="48" alt="Novarek" loading="lazy" decoding="async" />
+        </a>
+      </p>
       <a href="#inicio">Volver arriba ↑</a>
     </div>
   </div>
@@ -110,6 +116,28 @@ const year = new Date().getFullYear();
     padding-top: 2rem;
     border-top: 1px solid var(--line);
     color: var(--fg-dim);
+  }
+  .ftr__bottom {
+    align-items: center;
+  }
+  .ftr__credit {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .ftr__credit a {
+    display: inline-flex;
+    border-radius: 4px;
+    opacity: 0.85;
+    transition: opacity 0.18s;
+  }
+  .ftr__credit a:hover,
+  .ftr__credit a:focus-visible {
+    opacity: 1;
+  }
+  .ftr__credit img {
+    width: auto;
+    height: 1.25rem;
   }
   @media (max-width: 760px) {
     .ftr__cols {
