@@ -22,7 +22,7 @@ Builds section:
 
 | Setting | Value |
 | --- | --- |
-| Repository | `liprodriguezs-ai/metatron` |
+| Repository | `liprodriguezs-ai/metatron-landing` (the "Cloudflare Workers and Pages" GitHub App must have access to it) |
 | Build command | `pnpm run build` (builds only) |
 | Deploy command | `pnpm run deploy` (`wrangler deploy`, publishes only) |
 | Root directory | `/` |
@@ -40,8 +40,7 @@ stay there, so the site is attached through Cloudflare for SaaS on the `novarek.
 | Host | Served by |
 | --- | --- |
 | `www.metatronservice.com` | Cloudflare for SaaS custom hostname on the `novarek.mx` zone (fallback origin `saas.novarek.mx`), Worker route `www.metatronservice.com/*` → `metatron-landing`. Hostinger DNS: `CNAME www → saas.novarek.mx` plus the TXT validation records Cloudflare asks for. |
-| `metatronservice.com` | Hostinger redirect → `https://www.metatronservice.com`. |
-| `metatron.novarek.mx` | Worker custom domain on `metatron-landing` (preview / fallback). |
+| `metatronservice.com` | Cloudflare for SaaS custom hostname on `novarek.mx` plus the Single Redirect Rule "metatronservice.com raiz a www" (301 → `https://www.metatronservice.com`, path and query kept). Hostinger DNS: `ALIAS/CNAME @ → saas.novarek.mx` plus the `_cf-custom-hostname` TXT and `_acme-challenge` CNAME. Hostinger's own redirect cannot be used (it refuses to redirect a domain to itself). |
 
 ## Before going live
 
