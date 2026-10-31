@@ -17,6 +17,8 @@ export const site = {
   phoneDisplay: '938 183 8455',
   whatsapp: '529381838455',
   email: 'jimenez.metatron@gmail.com',
+  // Google Analytics 4 property "metatronservice.com" (account Metatron Service, li.prodriguezs@gmail.com).
+  gaMeasurementId: 'G-VE79EB0VG4',
   // The office location is intentionally not published; only the country is exposed.
   country: 'MX',
   manager: {

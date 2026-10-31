@@ -31,6 +31,13 @@ Builds section:
 `wrangler.jsonc` deliberately has no `routes` or custom domains; add domains in the dashboard (Worker →
 Domains). Node version for builds comes from `.node-version` (Astro 7 needs Node ≥ 22.22).
 
+## Analytics
+
+Google Analytics 4: account "Metatron Service", property `metatronservice.com`, web stream for
+`https://www.metatronservice.com`, measurement ID `G-VE79EB0VG4` (owner li.prodriguezs@gmail.com). The ID lives in
+`src/data/site.ts` (`gaMeasurementId`) and the tag is rendered in `src/layouts/Base.astro` only in production builds,
+so `pnpm dev` sends nothing. Default GA4 page tracking only: no custom events and no consent banner.
+
 ## Domains
 
 `SITE_URL` (`src/data/site-url.mjs`) is `https://www.metatronservice.com`: it drives canonical URLs, sitemap,
