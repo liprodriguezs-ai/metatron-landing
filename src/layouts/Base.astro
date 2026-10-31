@@ -53,6 +53,9 @@ const props = Astro.props;
     <slot />
     <script>
       import Lenis from 'lenis';
+      import { trackContactLinks } from '../lib/track';
+
+      trackContactLinks();
 
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

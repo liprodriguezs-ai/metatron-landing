@@ -292,6 +292,7 @@ import { services, site, whatsappUrl } from '../data/site';
 
 <script>
   import { site } from '../data/site';
+  import { track } from '../lib/track';
 
   const form = document.querySelector<HTMLFormElement>('[data-quote]')!;
   const err = form.querySelector<HTMLElement>('[data-err]')!;
@@ -312,6 +313,11 @@ import { services, site, whatsappUrl } from '../data/site';
     if (empresa) lines.push(`Empresa: ${empresa}`);
     lines.push(`Instalación: ${d.get('frente')}`, `Especialidad: ${d.get('servicio')}`, `Alcance: ${mensaje}`);
     const text = lines.join('\n');
+    track('quote_form_submit', {
+      channel: 'whatsapp',
+      installation: String(d.get('frente') ?? ''),
+      service: String(d.get('servicio') ?? ''),
+    });
     window.open(`https://wa.me/${site.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
   });
 </script>

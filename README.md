@@ -36,7 +36,11 @@ Domains). Node version for builds comes from `.node-version` (Astro 7 needs Node
 Google Analytics 4: account "Metatron Service", property `metatronservice.com`, web stream for
 `https://www.metatronservice.com`, measurement ID `G-VE79EB0VG4` (owner li.prodriguezs@gmail.com). The ID lives in
 `src/data/site.ts` (`gaMeasurementId`) and the tag is rendered in `src/layouts/Base.astro` only in production builds,
-so `pnpm dev` sends nothing. Default GA4 page tracking only: no custom events and no consent banner.
+so `pnpm dev` sends nothing. No consent banner.
+
+Conversion events (`src/lib/track.ts`, same names as herraga and novarek): `whatsapp_click`, `phone_click`,
+`email_click` (any matching link, with `link_location`) and `quote_form_submit` (quote form, with `installation` and
+`service`). `quote_form_submit` and `whatsapp_click` are marked as key events in GA.
 
 Google Search Console: URL-prefix property `https://www.metatronservice.com/` (li.prodriguezs@gmail.com), verified by
 the `google-site-verification` meta tag in `src/layouts/Base.astro`. Keep that tag or the property loses verification.
