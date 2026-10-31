@@ -38,6 +38,9 @@ Google Analytics 4: account "Metatron Service", property `metatronservice.com`, 
 `src/data/site.ts` (`gaMeasurementId`) and the tag is rendered in `src/layouts/Base.astro` only in production builds,
 so `pnpm dev` sends nothing. Default GA4 page tracking only: no custom events and no consent banner.
 
+Google Search Console: URL-prefix property `https://www.metatronservice.com/` (li.prodriguezs@gmail.com), verified by
+the `google-site-verification` meta tag in `src/layouts/Base.astro`. Keep that tag or the property loses verification.
+
 ## Domains
 
 `SITE_URL` (`src/data/site-url.mjs`) is `https://www.metatronservice.com`: it drives canonical URLs, sitemap,
@@ -53,7 +56,7 @@ stay there, so the site is attached through Cloudflare for SaaS on the `novarek.
 
 1. Confirm the business data in `src/data/site.ts` (phone, email). The office location is intentionally not
    published anywhere (page, JSON-LD, meta tags, llms.txt); only the country is exposed.
-2. Register the site in Google Search Console and Bing Webmaster Tools and submit `/sitemap-index.xml`.
+2. Submit `/sitemap-index.xml` in Google Search Console (property already verified) and register the site in Bing Webmaster Tools.
 3. Create or claim the Google Business Profile as a service-area business (address hidden), with the same name and phone as the site.
 
 ## Structure
